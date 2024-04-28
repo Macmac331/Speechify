@@ -1,0 +1,68 @@
+{
+  "Introduction/Self": [
+    "Tell me about yourself."
+  ],
+  "Strengths/Weaknesses": [
+    "What are your strengths and weaknesses?"
+  ],
+  "Goals/Achievement": [
+    "Where do you see yourself in five years?",
+    "What are your long-term career goals?"
+  ],
+  "Company": [
+    "Why do you want to work for our company?",
+    "What do you know about our industry?"
+  ],
+  "Pressure": [
+    "Describe a situation where you had to work under pressure.",
+    "Can you provide an example of a time when you had to resolve a conflict?"
+  ],
+  "Motivation/Goal": [
+    "What motivates you?",
+    "How do you handle failure?"
+  ],
+  "Project/Development": [
+    "Describe a successful project you were a part of and your role in it."
+  ],
+  "Time/Task Management": [
+    "How do you prioritize your tasks and manage your time effectively?"
+  ],
+  "Achievement/Goal": [
+    "What do you consider to be your biggest professional achievement?"
+  ],
+  "Learning/Technology": [
+    "How do you stay updated with the latest trends and technologies in your field?",
+    "Tell me about a time when you had to learn a new skill quickly."
+  ],
+  "Salary": [
+    "What are your salary expectations?"
+  ],
+  "Conflict/Environment": [
+    "Describe a time when you had to deal with a difficult coworker or customer.",
+    "How do you handle constructive criticism?"
+  ],
+  "Technical": [
+    "Can you explain a complex technical concept to someone with no technical background?"
+  ],
+  "Interests/Likes/Hobbies": [
+    "What do you like to do outside of work?"
+  ],
+  "Environment/Work Enviroment": [
+    "Describe your ideal work environment?"
+  ],
+  "Differentiation/Self Assessment": [
+    "What do you think sets you apart from other candidates?"
+  ],
+  "Deadlines/Time Management": [
+    "How do you handle tight deadlines?",
+    "Tell me about a time when you had to adapt to a significant change at work."
+  ],
+  "Organization/Categorize/Management": [
+    "How do you stay organized?",
+    "Describe a time when you had to lead a team."
+  ],
+  "Disagreements/Conflict": [
+    "What would you do if you disagreed with your manager's decision?",
+    "How do you handle ambiguity or uncertainty in a project?"
+  ]
+}
