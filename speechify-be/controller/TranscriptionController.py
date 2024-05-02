@@ -9,18 +9,18 @@ transcript_service = Transcript()
 summarizer_service = Summarizer()
 
 @transcription_controller.route(TRANSCRIPTION_API_BASE_URL + 'add', methods =['POST'])
-def addTranscribedText():
+def add_transcribed_text():
     transcript = request.get_json()
     return transcript_service.add_transcribed_text(transcript)
 
 @transcription_controller.route(TRANSCRIPTION_API_BASE_URL + 'get-transcript', methods =['GET'])
-def getTranscribedText():
+def get_transcribed_text():
     return transcript_service.get_transcribed_text()
 
 @transcription_controller.route(TRANSCRIPTION_API_BASE_URL + "get-summary", methods=['GET'])
-def getSummarizedTranscript():
+def get_summarized_transcript():
     return transcript_service.get_summarized_transcript()
 
 @transcription_controller.route(TRANSCRIPTION_API_BASE_URL + 'get-hate-speech', methods=['GET'])
-def getHateSpeechCount():
+def get_hate_speech_count():
     return transcript_service.get_hate_speech_count()

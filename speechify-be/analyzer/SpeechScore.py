@@ -8,23 +8,30 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from gensim.models import LdaModel
 from gensim.corpora import Dictionary
 from nltk.corpus import cmudict
-import string
 
 d = cmudict.dict()
 lemmatizer = WordNetLemmatizer()
 stop_words = set(stopwords.words('english'))
 
-def CalculateComplexity(paragraph): 
-    complexity_score = 0.39 * CalculateASL(paragraph) + 11.8 * CalculateASW(paragraph) - 15.59
+def calculate_complexity(paragraph): 
+    complexity_score = 0.39 * calculate_asl(paragraph) + 11.8 * calculate_asw(paragraph) - 15.59
 
     min_score = 1
-    max_score = 10
+    max_score = 18
+    new_min = 1
+    new_max = 10
+    mapped_score = map_grade_to_scale(complexity_score, min_score, max_score, new_min, new_max)
+    mapped_score = max(0, min(mapped_score, 10))
 
-    normalized_score = min_score + (complexity_score - min_score) * (max_score - min_score) / (max_score - min_score)
-        
-    return max(1, normalized_score)
+    return mapped_score
 
-def CalculateASL(paragraph):
+def map_grade_to_scale(score, min, max, newMin, newMax):
+    mapped_grade = ((score - min) * (newMax - newMin) / (max - min)) + newMin
+    mapped_grade_rounded = round(mapped_grade, 1)
+
+    return mapped_grade_rounded
+
+def calculate_asl(paragraph):
     words = word_tokenize(paragraph)
     sentences = sent_tokenize(paragraph)
 
@@ -37,18 +44,18 @@ def CalculateASL(paragraph):
         return total_words/total_sentences
         
 
-def CalculateASW(paragraph):
+def calculate_asw(paragraph):
     words = word_tokenize(paragraph)
     total_words = len(words)
         
     if total_words == 0:
         return 0
     else:
-        total_syllable = sum(SyllableCount(word) for word in words)
+        total_syllable = sum(syllable_count(word) for word in words)
         return total_syllable / total_words
     
 
-def SyllableCount(word):
+def syllable_count(word):
     word = ''.join(filter(lambda char: char.isalpha() or char == "-", word.lower()))
     
     if not word:
@@ -58,11 +65,11 @@ def SyllableCount(word):
         return 1
     return max([len(list(y for y in x if y[-1].isdigit())) for x in d[word]])
 
-def CountSyllablesInParagraph(paragraph):
+def count_syllable_in_paragraph(paragraph):
     words = word_tokenize(paragraph)
     total_syllables = 0
     for word in words:
-        syllables_in_word = SyllableCount(word)
+        syllables_in_word = syllable_count(word)
         total_syllables += syllables_in_word
     return total_syllables
 
@@ -79,7 +86,7 @@ def preprocess_topics(topics):
         tokens = topics.split('/')
         return tokens
 
-def calculateRelevance(transcript, topics):
+def calculate_relevance(transcript, topics):
     processed_topic = preprocess_topics(topics)
     processed_transcript = preprocess_text(transcript)
     
@@ -92,7 +99,7 @@ def calculateRelevance(transcript, topics):
     for topic in processed_topic:
         dictionary = Dictionary([processed_transcript])
         corpus = [dictionary.doc2bow(processed_transcript)]
-        lda_model = LdaModel(corpus, id2word=dictionary, num_topics=1)
+        lda_model = LdaModel(corpus, id2word=dictionary, num_topics=len(processed_topic))
 
         topic_distribution = lda_model.get_document_topics(corpus)[0]
         word_weight_topic = {}
@@ -117,3 +124,4 @@ def calculateRelevance(transcript, topics):
     relevance_score = sum(word_highest_scores.values())
     
     return math.ceil(relevance_score)
+

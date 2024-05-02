@@ -43,7 +43,7 @@ class Transcript:
     def get_hate_speech_count(self):
         try:
             transcript = self.transcript_storage.get('transcript')
-            counts, sentences = hsp.HateSpeechClass.hateSpeechCounter(transcript)
+            counts, sentences = hsp.HateSpeechClass.hate_speech_counter(transcript)
             print(transcript)
             if counts:
                 result = {

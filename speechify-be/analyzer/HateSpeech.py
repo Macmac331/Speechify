@@ -6,7 +6,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 
 class HateSpeechClass:
     @staticmethod
-    def hateSpeechCounter(text):
+    def hate_speech_counter(text):
         try:
             model_path = "C:\\Users\\bauti\\Desktop\\Speechify\\speechify-be\\analyzer\\Model\\decision_tree_classifier.joblib"
             model = load(model_path)

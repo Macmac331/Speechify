@@ -6,13 +6,13 @@ user_service = UserService()
 USER_API_BASE_URL = '/api/v1/user/'
 
 @user_controller.route(USER_API_BASE_URL + "create", methods=['POST'])
-def createUser():
+def create_user():
     data = request.json
     return user_service.create_user(data)
 
 
 @user_controller.route(USER_API_BASE_URL + "login", methods=['POST'])
-def loginUser():
+def login_user():
     data = request.json
     return user_service.login_user(data)
 
