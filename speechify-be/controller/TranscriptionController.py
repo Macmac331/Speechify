@@ -13,13 +13,9 @@ def add_transcribed_text():
     transcript = request.get_json()
     return transcript_service.add_transcribed_text(transcript)
 
-@transcription_controller.route(TRANSCRIPTION_API_BASE_URL + 'get-transcript', methods =['GET'])
-def get_transcribed_text():
-    return transcript_service.get_transcribed_text()
-
 @transcription_controller.route(TRANSCRIPTION_API_BASE_URL + "get-summary", methods=['GET'])
 def get_summarized_transcript():
-    return transcript_service.get_summarized_transcript()
+    return transcript_service.get_summary()
 
 @transcription_controller.route(TRANSCRIPTION_API_BASE_URL + 'get-hate-speech', methods=['GET'])
 def get_hate_speech_count():

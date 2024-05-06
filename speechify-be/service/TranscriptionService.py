@@ -18,26 +18,7 @@ class Transcript:
             return jsonify({"message": "Transcribed text received successfully"}), 200
         except Exception as e:
             return jsonify({"error": str(e)}), 500
-        
-    @token_required
-    def get_summarized_transcript(self):
-        try:
-            transcript = self.transcript_storage.get('transcript') 
-            if transcript:
-                summary = sm.Summarizer.transcriptSummarizer(transcript)
-                return jsonify({"summary": summary}), 200
-            else:
-                return jsonify({"error": "Transcript not found"}), 404
-            
-        except Exception as e:
-            return jsonify({"error": str(e)}), 500
 
-    def get_transcribed_text(self):
-        try:
-            transcript = self.transcript_storage.get('transcript')
-            return jsonify({"trancript" : transcript})
-        except Exception as e:
-            return jsonify({"error": str(e)}), 500
         
     @token_required
     def get_hate_speech_count(self):
@@ -56,3 +37,13 @@ class Transcript:
                 return jsonify({"error": "An error occurred while processing the transcript."}), 500
         except Exception as e:
             return jsonify({"error": "An error occurred while processing the transcript."}), 500
+        
+
+    @token_required
+    def get_summary(self):
+        try:
+            transcript = self.transcript_storage.get('transcript')
+            summary = sm.Summarizer.transcript_summarizer(transcript)
+            return jsonify({"summary" : summary }), 200
+        except Exception as e:
+            return jsonify({"error" : str(e)}), 500
