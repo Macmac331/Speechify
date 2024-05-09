@@ -21,8 +21,9 @@ const ResultPage = () => {
     const [summary, setSummary] = useState('');
     const token = String(localStorage.getItem('token'));
     const [isSuccessful, setIsSuccessful] = useState(false);
-    const [scores, setScores] = useState([])
-            
+    const [scores, setScores] = useState([]);
+    const renderAfterCalled = useRef(false)
+
     const fetchData = async () => {
         try {
             setIsLoading(true);
@@ -38,6 +39,7 @@ const ResultPage = () => {
             console.log(summaryResponse.summary);
             setIsLoading(false);
             setIsSuccessful(true);
+
         } catch (err) {
             console.log(err);
             setIsLoading(false);
@@ -59,8 +61,8 @@ const ResultPage = () => {
             data: {
                 labels: ['Language', 'Clarity', 'Complexity', 'Relevance ', 'Any'],
                 datasets: [{
-                    label: 'Dataset 1',
-                    data: [8, 1, 5, 7, 0],
+
+                    data: [8, 4, 5.9, 7.5, 9],
                     borderColor: 'rgb(86,190,79, 1)',
                     borderWidth: 2,
                 }]
@@ -96,15 +98,18 @@ const ResultPage = () => {
                 }
             }
         });
-    }    
-    useEffect(() =>{
-        fetchData();
+    }
 
+    useEffect(() =>{            
+        if(!renderAfterCalled.current){
+            fetchData();
+        }
+        renderAfterCalled.current = true;
     },[])
-    useEffect(() => {
+
+    useEffect(()=>{
         createChart();
-    }, [summary]);
-    
+    },[summary]);
     
     Chart.defaults.color = '#fff';
     Chart.defaults.font.size = 12
@@ -127,7 +132,7 @@ const ResultPage = () => {
                     <div className="lg:w-[50vw] w-full lg:hidden">
                         <div className="w-full lg:w-full xl:w-full lg:h-1/2 h-auto  p-4 flex items-center flex-col">
                             <h1 className="text-black text-3xl font-bold font-Poppins">Summary</h1>
-                            <p className="p-5 text-xl font-Poppins lg:px-16 lg:pt-4 lg:mt-2 text-black tracking-normal">{summary}</p>
+                            <p className="p-5 text-md md:text-xl font-Poppins px-2 lg:px-6 lg:pt-4 lg:mt-2 text-black tracking-normal">{summary}</p>
                         </div>
                     </div>
                     <div className="w-full lg:w-1/2 xl:w-1/2 h-[83vh] md:h-full p-4 flex justify-center">
@@ -141,7 +146,7 @@ const ResultPage = () => {
                     <div className="lg:w-[50vw] w-full">
                         <div className="hidden w-full lg:w-full xl:w-full lg:h-1/2 h-auto  p-4 lg:flex lg:items-center lg:flex-col">
                             <h1 className="text-black text-3xl font-bold font-Poppins">Summary</h1>
-                            <p className="p-5 text-xl font-Poppins lg:px-16 lg:pt-4 lg:mt-2 text-black tracking-normal">{summary}</p>
+                            <p className="p-5 text-md md:text-xl font-Poppins px-2 lg:px-6 lg:pt-4 lg:mt-2 text-black tracking-normal">{summary}</p>
                         </div>
                         <div className="w-full lg:w-full xl:w-full lg:h-1/2 h-auto  p-4 flex items-center flex-col">
                             <h1 className="text-black text-3xl font-bold font-Poppins tracking-normal">Suggestions</h1>

@@ -28,6 +28,8 @@ const SpeechPage = () => {
                         data = ImpromptuData
                         break;
                     case 'Prepared-speech':
+                        setRandomQuestion('')
+                        return;
                         break;
                     default:
                         throw new Error('Invalid category');
@@ -79,10 +81,10 @@ const SpeechPage = () => {
                     <h1 className="mb-2 md:mb-4 text-3xl font-Poppins font-bold">
                         {category}
                     </h1>
-                    <div className="text-center w-[80vw] md:w-[40vw] bg-blue-400 p-4 rounded-md">
+                    <div className={`text-center w-[80vw] md:w-[40vw] p-4 rounded-md ${category !=='Prepared-speech' ? 'bg-blue-400' :''}`}>
                         <h1 className=" font-Poppins text-2xl">{randomQuestion}</h1>
                     </div>
-                    <p onClick={handleNextClick} className="mt-2 font-Poppins text-xl underline cursor-pointer">Next</p>
+                    <p onClick={handleNextClick} className={`mt-2 font-Poppins text-xl underline cursor-pointer`}>{category !== 'Prepared-speech' ? 'Next' : ''}</p>
                 </div>
                 <SpeechRecognition setTranscript={setTranscript} showGenerateButton={showGenerateButton} setShowGenerateButton={setShowGenerateButton} onClick={handleGenerateClick} />
             </div>

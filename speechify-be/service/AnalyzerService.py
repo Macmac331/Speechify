@@ -42,3 +42,13 @@ class Analyzer:
             return jsonify({scores}), 200
         except Exception as e:
             return jsonify({"error: " : str(e)}), 500
+
+    @token_required
+    def get_wrong_grammar(self):
+        try:
+            transcript = transcript_service.transcript_storage('transcript')
+            wrong_grammar = Analyzer.get_wrong_grammar(transcript)
+
+            return jsonify({wrong_grammar}), 200
+        except Exception as e:
+            return jsonify({"error: " : str(e)}), 500

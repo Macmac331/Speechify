@@ -6,3 +6,4 @@ SQLALCHEMY_DATABASE_URI = "postgresql://postgres.limgkqxoxzhczpxudxtk:speechifya
 
 SECRET_KEY = 'd55f52c8f4b74cea97dd9e242563b516'
 
+API_KEY = 'AIzaSyBJbNlzvpIpYewhHkljh9Ktc3hcGa2RayY'
