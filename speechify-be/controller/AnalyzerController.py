@@ -29,3 +29,7 @@ def get_relevance_score():
 @analyzer_controller.route(ANALYZER_API_BASE_URL + "get-wrong-grammar", methods=['GET'])
 def get_wrong_grammar():
     return analyzer_service.get_wrong_grammar()
+
+@analyzer_controller.route(ANALYZER_API_BASE_URL + "get-topic", methods=['GET'])
+def get_topic():
+    return analyzer_service.get_topic()

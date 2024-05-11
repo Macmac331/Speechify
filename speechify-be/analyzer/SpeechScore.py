@@ -8,10 +8,17 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from gensim.models import LdaModel
 from gensim.corpora import Dictionary
 from nltk.corpus import cmudict
+import google.generativeai as genai
+import os
+import re
 
 d = cmudict.dict()
 lemmatizer = WordNetLemmatizer()
 stop_words = set(stopwords.words('english'))
+model = genai.GenerativeModel('gemini-pro')
+genai.configure(
+    api_key=os.getenv('API_KEY')
+)
 
 def calculate_complexity(paragraph): 
     complexity_score = 0.39 * calculate_asl(paragraph) + 11.8 * calculate_asw(paragraph) - 15.59
@@ -81,16 +88,24 @@ def preprocess_text(transcript):
 
 def preprocess_topics(topics):
     if topics is None:
+        print(topics)
         return "No Topics"
+
     else:
+        tokens = topics.split('\n')
         tokens = topics.split('/')
+        tokens = [re.sub(r'[\*\d]+', '', token).strip("- ").strip() for token in tokens if token.strip("- ").strip()]
+        print(tokens)
         return tokens
 
+
 def calculate_relevance(transcript, topics):
+
     processed_topic = preprocess_topics(topics)
+    print(processed_topic)
     processed_transcript = preprocess_text(transcript)
     
-    tfidf_vect = TfidfVectorizer(tokenizer=preprocess_text)
+    tfidf_vect = TfidfVectorizer(tokenizer=preprocess_text, token_pattern=None)
     tfidf_matrix = tfidf_vect.fit_transform([transcript])
 
     vocabulary = tfidf_vect.vocabulary_
@@ -124,4 +139,13 @@ def calculate_relevance(transcript, topics):
     relevance_score = sum(word_highest_scores.values())
     
     return math.ceil(relevance_score)
+
+def extract_topic(transcript):
+    chat = model.start_chat()
+    req = "Extract four one-word topic for: " + transcript
+    res = chat.send_message(req)
+
+    return res.text
+
+
 
