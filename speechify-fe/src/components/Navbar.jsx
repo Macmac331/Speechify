@@ -12,16 +12,12 @@ const Navbar = () => {
         setMenuOpen(!isMenuOpen);
     };
     const handleLogout = () =>{
-        const confirmLogout = window.confirm("Are you sure you want to log out?");
-        if(confirmLogout){
-            navigate('/')
-            localStorage.removeItem('token');
-            sessionStorage.removeItem('isLoggedIn');
-            sessionStorage.removeItem('username');
-            sessionStorage.removeItem('category');
-            setIsLoggedIn(false)
-        }
-        return;
+        navigate('/')
+        localStorage.removeItem('token');
+        sessionStorage.removeItem('isLoggedIn');
+        sessionStorage.removeItem('username');
+        sessionStorage.removeItem('category');
+        setIsLoggedIn(false)
     }
     return (
         <header className="shadow-md z-50">
