@@ -14,21 +14,23 @@ const Navbar = () => {
     const handleLogout = () =>{
         navigate('/')
         localStorage.removeItem('token');
-        sessionStorage.removeItem('isLoggedIn');
+        setIsLoggedIn(false);
         sessionStorage.removeItem('username');
         sessionStorage.removeItem('category');
+        localStorage.removeItem('summary');
+        localStorage.removeItem('scores')
         setIsLoggedIn(false)
     }
     return (
         <header className="shadow-md z-50">
-            <nav className="flex items-center justify-between w-[85%] h-[12vh] mx-auto md:w-[87vw] lg:w-[75vw]">
+            <nav className="flex items-center justify-between w-[85%] h-[12vh] mx-auto md:w-[87vw] lg:w-[75vw] ">
                 <div>
                     <Link to = '/'
                         className="font-Gluten font-bold text-3xl md:text-4xl tracking-wider no-underline " style={{ WebkitTextStroke: '1px black', textStroke: '1px black', color: '#78CEFF', textShadow: '1px 1px 1px #FFF' }}>
-                        SpeechifyAI
+                        Speechilyze
                     </Link>
                 </div>
-                <div className={`absolute md:static top-[12vh] left-0 w-full  md:w-auto md:flex md:items-center transition-all duration-300 ${
+                <div className={`absolute md:static top-[12vh] z-40 left-0 w-full  md:w-auto md:flex md:items-center transition-all duration-300 ${
                     isMenuOpen ? "h-[40vh] shadow-md bg-white md:bg-none md:shadow-none md:-z-10" : "-translate-y-96 md:translate-y-0 hidden"
                 }`}>
                     <ul className=" md:flex-grow md:flex justify-center items-center list-none flex-col md:flex-row md:space-x-8 lg:space-x-20 p-4 m-2">
@@ -39,6 +41,15 @@ const Navbar = () => {
                         ) : (
                             <></>
                         )}
+                        {isLoggedIn? (
+                            ""
+                        ): (
+                            <li className="md:block">
+                                <Link to="/" className="font-Poppins text-center text-2xl md:text-xl font-normal cursor-pointer no-underline hover:text-gray-400 ">Try for free</Link>
+                            </li>
+                        )
+                            
+                        }
                         <li className="md:block">
                             <Link to="/tutorial" className="font-Poppins text-center text-2xl md:text-xl font-normal cursor-pointer no-underline hover:text-gray-400 ">Tutorial</Link>
                         </li>

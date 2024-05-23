@@ -39,13 +39,26 @@ class AnaylyzerService{
                     Authorization : token
                 }
             }
-            const response = await axios.get(ANALYZER_API_BASE_URL + "get-scores", config);
+            const response = await axios.get(ANALYZER_API_BASE_URL + "get-score", config);
             return response.data
         }catch (err) {
             console.log("Error fetching scores:", err);
             throw err;
         }
-        
     }
+     async getWrongGrammar(token){
+        try{
+            const config = {
+                headers : {
+                    Authorization : token
+                }
+            }
+            const response = await axios.get(ANALYZER_API_BASE_URL + "get-wrong-grammar", config);
+            return response.data
+        }catch(err){
+            console.log("Error fetching data", err);
+            throw err;
+        }
+     }
 }
 export default new AnaylyzerService();

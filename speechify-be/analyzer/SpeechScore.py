@@ -11,6 +11,14 @@ from nltk.corpus import cmudict
 import google.generativeai as genai
 import os
 import re
+from transformers import AutoTokenizer
+from transformers import AutoModelForSequenceClassification
+from scipy.special import softmax
+import numpy as np
+
+MODEL = f"cardiffnlp/twitter-roberta-base-sentiment"
+tokenizer = AutoTokenizer.from_pretrained(MODEL)
+model_roberta = AutoModelForSequenceClassification.from_pretrained(MODEL)
 
 d = cmudict.dict()
 lemmatizer = WordNetLemmatizer()
@@ -20,17 +28,19 @@ genai.configure(
     api_key=os.getenv('API_KEY')
 )
 
+#Calculate understandability
 def calculate_complexity(paragraph): 
     complexity_score = 0.39 * calculate_asl(paragraph) + 11.8 * calculate_asw(paragraph) - 15.59
 
     min_score = 1
     max_score = 18
-    new_min = 1
-    new_max = 10
-    mapped_score = map_grade_to_scale(complexity_score, min_score, max_score, new_min, new_max)
-    mapped_score = max(0, min(mapped_score, 10))
+    new_min = 10 
+    new_max = 1
+    reversed_score  = map_grade_to_scale(complexity_score, min_score, max_score, new_min, new_max)
+    reversed_score  = max(0, min(reversed_score , 10))
 
-    return mapped_score
+    return reversed_score 
+
 
 def map_grade_to_scale(score, min, max, newMin, newMax):
     mapped_grade = ((score - min) * (newMax - newMin) / (max - min)) + newMin
@@ -80,12 +90,14 @@ def count_syllable_in_paragraph(paragraph):
         total_syllables += syllables_in_word
     return total_syllables
 
+
 def preprocess_text(transcript):
     tokens = word_tokenize(transcript)
     tokens = [token for token in tokens if token.isalnum()]
     tokens = [lemmatizer.lemmatize(token) for token in tokens if token not in stop_words]
     return tokens
 
+#DAta cleaning
 def preprocess_topics(topics):
     if topics is None:
         print(topics)
@@ -98,9 +110,9 @@ def preprocess_topics(topics):
         print(tokens)
         return tokens
 
-
+#Calculate Importance
 def calculate_relevance(transcript, topics):
-
+  
     processed_topic = preprocess_topics(topics)
     print(processed_topic)
     processed_transcript = preprocess_text(transcript)
@@ -132,6 +144,7 @@ def calculate_relevance(transcript, topics):
 
     word_highest_scores = {}
 
+    #Cacculate avarege score per sentence
     for word in vocabulary:
         highest_score = max(word_weights_topics[topic][word] for topic in processed_topic)
         word_highest_scores[word] = highest_score + 0.02
@@ -149,3 +162,33 @@ def extract_topic(transcript):
 
 
 
+#Attitude scores per sentence
+def sentiment_predictor(transcript):
+    sentences = sent_tokenize(transcript)
+    scores_dict = {'neg': [], 'pos': [], 'neu': []}
+
+    for sentence in sentences:
+        encoded_text = tokenizer(sentence, return_tensors='pt')
+        output = model_roberta(**encoded_text)
+        scores = output[0][0].detach().numpy()
+        scores = softmax(scores)
+        scores_dict['neg'].append(scores[0])
+        scores_dict['pos'].append(scores[1])
+        scores_dict['neu'].append(scores[2])
+        
+    overall_avg_scores = {
+        'neg': float(np.mean(scores_dict['neg'])),
+        'pos': float(np.mean(scores_dict['pos'])), 
+        'neu': float(np.mean(scores_dict['neu']))
+    }
+    return overall_avg_scores
+
+#Calculate Attidude
+def sentiment_score(transcript):
+    scores = sentiment_predictor(transcript)
+    neu_score = scores['neu']
+    pos_score = scores['pos']
+
+    score = neu_score + pos_score
+    grade = score * 10
+    return round(grade,1)

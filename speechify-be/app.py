@@ -1,11 +1,16 @@
 from flask import Flask
 from flask_cors import CORS
 from schema.DbTables import db
-from config import SQLALCHEMY_DATABASE_URI, SECRET_KEY
+from dotenv import load_dotenv
+import os
 
+def configure():
+    load_dotenv()
+
+configure()
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
-app.config["SECRET_KEY"] = SECRET_KEY
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI')
+app.config["SECRET_KEY"] = os.environ.get('SECRET_KEY')
 
 
 db.init_app(app)

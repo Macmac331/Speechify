@@ -29,6 +29,18 @@ class TranscriptionService {
             throw err;
         }
     }
+    async GetHateSpeech(token){
+        const config = {
+            headers : {
+                Authorization : token
+            }
+        }
+        const response = await axios.get(TRANSCRIPTION_API_BASE_URL + 'get-hate-speech', config)
+        return response.data;
+    }catch(err){
+        console.log("Error getting hate speech", err);
+        throw err;
+    }
 }
 
 export default new TranscriptionService();

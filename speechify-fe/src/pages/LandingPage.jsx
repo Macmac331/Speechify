@@ -10,7 +10,7 @@ const LandingPage = () => {
         <>
         <div className="h-[88vh] w-full md:w-[70vw] mx-auto flex items-center">
             <div className="p-6 ml-4 md:p-0 md:ml-0">          
-                <h1 className="font-Poppins mt-2 md:mt-16 text-4xl mb-5">Elevate your eloquence<br/>with Speechify</h1>
+                <h1 className="font-Poppins mt-2 md:mt-16 text-5xl mb-5 font-semibold">Elevate your eloquence<br/>with Speechilyze</h1>
                 <p className="h-full font-Poppins text-lg pr-6 max-w-[500px] mb-4">
                 Our AI-powered platform offers real-time feedback to help you master the art of communication effortlessly, enabling you to captivate any audience with confidence and clarity.
                 </p>

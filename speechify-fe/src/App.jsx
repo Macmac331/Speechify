@@ -9,6 +9,7 @@ import 'regenerator-runtime/runtime';
 import CategorySelect from "./pages/CategorySelectPage";
 import SpeechPage from "./pages/SpeechPage";
 import ResultPage from "./pages/ResultPage";
+import Tutorial from "./pages/Tutorial";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(Boolean(sessionStorage.getItem('isLoggedIn')));
@@ -30,6 +31,7 @@ function App() {
               path="/login"
               element={<Login/>}
           />
+          <Route path ="/tutorial" element={<Tutorial/>}/>
           <Route path="/home" element={isLoggedIn ? <Home /> : <Navigate to="/login" />} />
           <Route path="/speech" element={isLoggedIn ? <CategorySelect /> : <Navigate to="/login" />} />
           <Route path="/speech/category/:category" element={isLoggedIn? <SpeechPage/> : <Navigate to="/login"/>} /> 

@@ -13,6 +13,7 @@ def add_transcribed_text():
     transcript = request.get_json()
     return transcript_service.add_transcribed_text(transcript)
 
+
 @transcription_controller.route(TRANSCRIPTION_API_BASE_URL + "get-summary", methods=['GET'])
 def get_summarized_transcript():
     return transcript_service.get_summary()

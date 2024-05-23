@@ -4,6 +4,7 @@ from joblib import load
 import os
 from sklearn.feature_extraction.text import CountVectorizer
 
+
 class HateSpeechClass:
     @staticmethod
     def hate_speech_counter(text):

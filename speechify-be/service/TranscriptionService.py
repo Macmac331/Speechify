@@ -20,7 +20,6 @@ class Transcript:
             return jsonify({"error": str(e)}), 500
 
         
-    @token_required
     def get_hate_speech_count(self):
         try:
             transcript = self.transcript_storage.get('transcript')

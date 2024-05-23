@@ -6,7 +6,7 @@ ANALYZER_API_BASE_URL = '/api/v1/analyzer/'
 
 analyzer_service = Analyzer()
 
-@analyzer_controller.route( ANALYZER_API_BASE_URL + '/get-grammar-score', methods =['GET'])
+@analyzer_controller.route( ANALYZER_API_BASE_URL + 'get-grammar-score', methods =['GET'])
 def get_grammar_score():
     return analyzer_service.get_grammar_score()
 
@@ -18,11 +18,12 @@ def get_complexity_score():
 def get_clarity_score():
     return analyzer_service.get_clarity_score()
 
+#Getting all scores
 @analyzer_controller.route(ANALYZER_API_BASE_URL + "get-score", methods = ['GET'])
 def get_score():
     return analyzer_service.get_scores()
 
-@analyzer_controller.route(ANALYZER_API_BASE_URL + "relevance-score", methods = ['GET'])
+@analyzer_controller.route(ANALYZER_API_BASE_URL + "get-relevance-score", methods = ['GET'])
 def get_relevance_score():
     return analyzer_service.get_relevance_score()
 
@@ -33,3 +34,7 @@ def get_wrong_grammar():
 @analyzer_controller.route(ANALYZER_API_BASE_URL + "get-topic", methods=['GET'])
 def get_topic():
     return analyzer_service.get_topic()
+
+@analyzer_controller.route(ANALYZER_API_BASE_URL + 'get-sentiment-score', methods=['GET'])
+def get_sentiment_scores():
+    return analyzer_service.get_sentiment_scores()

@@ -29,3 +29,16 @@ export const setUserId = (userId) =>{
 export const getUserId = () =>{
     return sessionStorage.getItem('userId')
 }
+export const setSummaryLocal = (summary) => {
+    localStorage.setItem('summary', summary);
+}
+export const getSummary = () =>{
+    return localStorage.getItem('summary');
+}
+export const setScoresLocal = (scores) =>{
+    localStorage.setItem('scores', scores);
+}
+export const getScores = () =>{
+    return localStorage.getItem('scores');
+}
+

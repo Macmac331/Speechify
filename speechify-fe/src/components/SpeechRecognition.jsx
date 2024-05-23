@@ -1,25 +1,31 @@
 import { useState, useRef } from "react";
 import TranscriptionService from "../service/TranscriptionService";
 import ScaleLoader from 'react-spinners/ScaleLoader'
-const SpeechRecognition = ({ setTranscript, setShowGenerateButton, showGenerateButton, onClick }) => {
+const SpeechRecognition = ({ setTranscript, setShowGenerateButton, showGenerateButton, onClick, clearAlert, textareaValue, onTextareaChange }) => {
     const [isListening, setIsListening] = useState(false);
     const [transcription, setTranscription] = useState('');
     const recognitionRef = useRef(null);
     const timeoutRef = useRef(null);
     const [showGenerate, setShowGenerate] = useState(false);
+    const [wantSpeak, setWantSpeak] = useState(true);
 
     const startListening = () => {
         const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition)();
         recognitionRef.current = recognition;
         recognition.lang = 'en-US';
         recognition.interimResults = true;
-        recognition.maxSilence = 4000;
+        recognition.maxSilence = 5000;
+
         recognition.onstart = () => {
             setIsListening(true);
             setShowGenerate(false)
             setShowGenerateButton(false)
+            clearAlert();
         };
-
+        recognition.onend = () => {
+            setIsListening(false)
+            setTranscript(transcription)
+        };
         recognition.onresult = handleRecognitionResult;
 
         recognition.start();
@@ -37,6 +43,13 @@ const SpeechRecognition = ({ setTranscript, setShowGenerateButton, showGenerateB
             setTranscript(transcription)
         }
     };
+    const togglePref = () =>{
+        if(wantSpeak){
+            setWantSpeak(false);
+        }else{
+            setWantSpeak(true)
+        }
+    };
 
     const toggleListening = () => {
         if (isListening) {
@@ -45,6 +58,7 @@ const SpeechRecognition = ({ setTranscript, setShowGenerateButton, showGenerateB
             startListening();
         }
     };
+
 
     const handleRecognitionResult = event => {
         let interimTranscript = '';
@@ -66,13 +80,16 @@ const SpeechRecognition = ({ setTranscript, setShowGenerateButton, showGenerateB
         }
 
         clearTimeout(timeoutRef.current);
-        timeoutRef.current = setTimeout(startListening, 1000);
+        timeoutRef.current = setTimeout(startListening, 500);
     };
-
+    const handleTextAreaChange = (e) => {
+        
+    }
     return (
         <div>
-            <div className="flex flex-col items-center mt-16 md:mt-28 mb-">
-                <button
+            <div className="flex flex-col items-center mt-6 md:mt-4 mb-">
+                {wantSpeak? (
+                    <button
                     className="mb-2 overflow-hidden w-32 p-2 h-12 bg-black text-white border-none rounded-md text-xl font-bold cursor-pointer relative z-10 group"
                     onClick={toggleListening}
                     >{isListening? "" : "Ready?"}
@@ -92,29 +109,48 @@ const SpeechRecognition = ({ setTranscript, setShowGenerateButton, showGenerateB
                         </>
                     )}
                 </button>
-
-                
-                {isListening ? (
-                    <div className="flex flex-row p-2 opacity-70">
-                        <span className="font-Poppins mr-2 text-lg">Listening</span>
-                        <ScaleLoader className="mb-2"
-                            height = {24}
-                            color="#78CEFF" />
+                ) : ("")}
+                {wantSpeak? (
+                    isListening ? (
+                        <>
+                        <div className="flex flex-row p-2 opacity-70">
+                            <span className="font-Poppins mr-2 text-lg">Listening</span>
+                                <ScaleLoader className="mb-2"
+                                    height = {24}
+                                    color="#78CEFF" />
+                        </div>
+                        </>             
+                        ) : (
+                        <span className="font-Poppins text-lg">Not Listening</span>
+                        )
+                ): (
+                    <div>
+                        <textarea 
+                            value={textareaValue}
+                            onChange={onTextareaChange}
+                            className="h-[30vh] border-2 rounded-md w-[80vw] p-4 md:w-[50vw] lg:w-[30vw]" rows="10" cols="50"/>
                     </div>
-                    
-                ) : (
-                    <span className="font-Poppins text-md">Not Listening</span>
                 )}
-                {showGenerate  && (
+                {wantSpeak? (
+                    showGenerate && (
+                        <div className="mt-8 flex justify-center" onClick ={onClick}>
+                            <button 
+                            className="bg-[#61FFB0] hover:bg-[#379C6C] hover:text-white h-12 w-40 rounded-md text font-Poppins  "                                  
+                            >
+                                Generate Result
+                            </button>
+                        </div>
+                        )
+                ): (
                     <div className="mt-8 flex justify-center" onClick ={onClick}>
                         <button 
-                            className="bg-[#61FFB0] hover:bg-[#379C6C] hover:text-white h-12 w-40 rounded-md text font-Poppins  "
-                            
+                        className="bg-[#61FFB0] hover:bg-[#379C6C] hover:text-white h-12 w-40 rounded-md text font-Poppins  "                                  
                         >
                             Generate Result
                         </button>
                     </div>
                 )}
+                <p className="mt-10 font-Poppins cursor-pointer" onClick={togglePref}>{wantSpeak? "Use Transcript" : "Use Mic"}</p>
             </div>
         </div>
     );

@@ -8,6 +8,7 @@ const Login = () => {
         username : "",
         password : ""
     })
+    const [loginError, setLoginError] = useState(false);
     const navigate = useNavigate();
 
     const handleLogin = (e) =>{
@@ -26,6 +27,7 @@ const Login = () => {
                     setUserId(response.data['user_id'])
                 }
             }).catch((err) =>{
+                setLoginError(true)
                 console.log(userData);
                 console.log(err);
             })
@@ -35,16 +37,21 @@ const Login = () => {
         <div className='flex items-center justify-center h-[88vh]'>
             <form onSubmit={handleLogin} className='w-[90vw] md:w-[50vw] lg:w-[30vw] bg-white shadow-xl rounded px-8 pt-6 pb-8 mb-4 mx-2 mt-2'>
                 <h1 className='text-3xl font-bold text-center mb-3 font-Poppins'>
-                    Speechify 
+                    Speechilyze 
                 </h1>
                 <p className='w-full font-Poppins text-center mt-[-10px] text-sm mb-4'>Amplify your voice, empower your ideas</p>
+                {loginError && (
+                    <p className='text-center font-Poppins text-lg bg-red-100 p-2 mt-2 mb-2 rounded-md'>
+                        Invalid credentials
+                    </p>
+                )}
                 <h2 
                     className="text-2xl font-bold mb-3 text-left font-Poppins">
                     Login</h2>
                     
                     <div className='mb-3'>
                         <label
-                            className="block text-gray-700 text-sm font-bold mb-2 font-Poppins" 
+                            className="block text-gray-700 text-md font-semibold mb-2 font-Poppins" 
                             >
                             Username
                             </label>
@@ -59,7 +66,7 @@ const Login = () => {
                     </div>
                     <div className='mb-3'>
                     <label
-                        className="block text-gray-700 text-sm font-bold mb-2 font-Poppins" 
+                        className="block text-gray-700 text-md font-semibold mb-2 font-Poppins" 
                         >
                         Password
                         </label>

@@ -1,4 +1,4 @@
-from flask import jsonify
+from flask import jsonify, make_response
 from service import TranscriptionService
 from analyzer import GrammarChecker
 import json
@@ -32,27 +32,37 @@ class Analyzer:
     def get_scores(self):
         try:
             transcript = transcript_service.transcript_storage.get('transcript')
-            topics = transcript_service.transcript_storage.get('category')
+            storedTopics = transcript_service.category_storage.get('category')
+            if storedTopics is None or storedTopics == "":
+                generatedTopics = SpeechScore.extract_topic(transcript)
+                relevance_score = SpeechScore.calculate_relevance(transcript, generatedTopics)
+            else:
+                relevance_score = SpeechScore.calculate_relevance(transcript, storedTopics)
+
             clarity_score = GrammarChecker.calculate_clarity(transcript)
             complexity_score = SpeechScore.calculate_complexity(transcript)
-            relevance_score = SpeechScore.calculate_relevance(transcript, topics)
+            sentiment_score = SpeechScore.sentiment_score(transcript)
+
             scores = {
                 "complexity" : complexity_score,
                 "clarity" : clarity_score,
-                "relevance" : relevance_score
+                "relevance" : relevance_score,
+                "language" : 0,
+                "sentiment" : sentiment_score,
             }
-            return jsonify({scores}), 200
+            return jsonify(scores), 200
         except Exception as e:
             return jsonify({"error: " : str(e)}), 500
 
-    @token_required
     def get_wrong_grammar(self):
-        try:
+        try:    
             transcript = transcript_service.transcript_storage.get('transcript')
-            wrong_grammar = Analyzer.get_wrong_grammar(transcript)
-            return jsonify({wrong_grammar}), 200
+            if transcript is None:
+                return jsonify({"message" : "No transcript found "}),200
+            wrong_grammar = GrammarChecker.grammar_checker(transcript)
+            return jsonify(wrong_grammar),200
         except Exception as e:
-            return jsonify({"error: " : str(e)}), 500
+            return jsonify({"error" : str(e)}), 500
         
     def get_relevance_score(self):
         try:
@@ -75,5 +85,13 @@ class Analyzer:
             topics = SpeechScore.extract_topic(transcript)
             topic = SpeechScore.preprocess_topics(topics)
             return jsonify({"topic" : topic}), 200
+        except Exception as e:
+            return jsonify({"error" : str(e)}), 500
+        
+    def get_sentiment_scores(self):
+        try:
+            transcript = transcript_service.transcript_storage.get('transcript')
+            score = SpeechScore.sentiment_score(transcript)
+            return jsonify({"sentiment_score" : score}), 200
         except Exception as e:
             return jsonify({"error" : str(e)}), 500

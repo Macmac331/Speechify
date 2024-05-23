@@ -16,7 +16,10 @@ const SpeechPage = () => {
     const [questionCat, setQuestionCat] = useState([]);
     const [allQuestions, setAllQuestions] = useState({})
     const [usedCat, setUsedCat] = useState('');
+    const [alertUser, setAlertUser] = useState(false);
+
     useEffect(() => {
+        setTranscript('');
         const fetchData = async () => {
             try {
                 let data = [];
@@ -28,12 +31,13 @@ const SpeechPage = () => {
                         data = ImpromptuData
                         break;
                     case 'Prepared-speech':
-                        setRandomQuestion('')
+                        setRandomQuestion('');
+                        setUsedCat('');
                         return;
-                        break;
                     default:
                         throw new Error('Invalid category');
                 }
+
                 const questionCat = Object.keys(data);
                 const questionAll = Object.values(data)
                 const randomCatIndex = Math.floor(Math.random() * questionCat.length);
@@ -64,29 +68,45 @@ const SpeechPage = () => {
         setUsedCat(randomCat)
     };
     const handleGenerateClick = () => {
-        if(!token){
-            
+        if(transcript === ""){
+            setAlertUser(true)
+            console.log("error");
         }else{
             TranscriptionService.SendTranscribedText(transcript, usedCat, token);
             navigate(`/speech/category/${category}/result`); 
         }
-
     };
-
+    const clearAlert = () => {
+        setAlertUser(false);
+    };
+    const handleTextareaChange = (e) => {
+        const value = e.target.value;
+        setTranscript(value);
+    };
     return (
         <div className="h-[88vh] w-screen flex item-center">
 
             <div className="flex flex-col w-full justify-center">
-                <div className="flex flex-col items-center justify-center lg:mb-10">
-                    <h1 className="mb-2 md:mb-4 text-3xl font-Poppins font-bold">
+                <div className="flex flex-col items-center justify-center lg:mb-2">
+                    <h1 className="mb-2 md:mb-2 text-3xl font-Poppins font-bold">
                         {category}
                     </h1>
+
+                    {alertUser &&(
+                        <p className="p-4 bg-red-100 font-Poppins text-md rounded-md mt-5 mb-2">No Transcript found</p>
+                    )}
                     <div className={`text-center w-[80vw] md:w-[40vw] p-4 rounded-md ${category !=='Prepared-speech' ? 'bg-blue-400' :''}`}>
                         <h1 className=" font-Poppins text-2xl">{randomQuestion}</h1>
                     </div>
                     <p onClick={handleNextClick} className={`mt-2 font-Poppins text-xl underline cursor-pointer`}>{category !== 'Prepared-speech' ? 'Next' : ''}</p>
                 </div>
-                <SpeechRecognition setTranscript={setTranscript} showGenerateButton={showGenerateButton} setShowGenerateButton={setShowGenerateButton} onClick={handleGenerateClick} />
+                <SpeechRecognition 
+                    setTranscript={setTranscript} 
+                    showGenerateButton={showGenerateButton} 
+                    setShowGenerateButton={setShowGenerateButton} 
+                    onClick={handleGenerateClick} 
+                    clearAlert={clearAlert}
+                    onTextareaChange={handleTextareaChange}/>
             </div>
         </div>
     );

@@ -35,7 +35,7 @@ const Signup = () => {
         <div className='flex items-center justify-center h-screen'>
             <form onSubmit={handleSubmit} className='w-[90vw] md:w-[50vw] lg:w-[30vw] bg-white shadow-xl rounded px-8 pt-6 pb-8 mb-4 mx-2 mt-2'>
                 <h1 className='text-3xl font-bold text-center mb-3 font-Poppins'>
-                    Speechify 
+                Speechilyze 
                 </h1>
                 <p className='w-full font-Poppins text-center mt-[-10px] text-sm mb-4'>Amplify your voice, empower your ideas</p>
                 <h2 
@@ -44,7 +44,7 @@ const Signup = () => {
                 </h2>
                 <div className='mb-3'>
                     <label
-                        className="block text-gray-700 text-sm font-bold mb-2 font-Poppins" 
+                        className="block text-gray-700 text-md font-semibold mb-2 font-Poppins" 
                         >
                         First Name
                         </label>
@@ -59,7 +59,7 @@ const Signup = () => {
                 </div>
                 <div className='mb-3'>
                     <label
-                        className="block text-gray-700 text-sm font-bold mb-2 font-Poppins" 
+                        className="block text-gray-700 text-md font-semibold mb-2 font-Poppins" 
                         >
                         Last Name
                         </label>
@@ -74,7 +74,7 @@ const Signup = () => {
                     </div>
                 <div className='mb-3'>
                     <label
-                        className="block text-gray-700 text-sm font-bold mb-2 font-Poppins" 
+                        className="block text-gray-700 text-md font-semibold mb-2 font-Poppins" 
                         >
                         Username
                         </label>
@@ -89,7 +89,7 @@ const Signup = () => {
                     </div>
                 <div className='mb-3'>
                     <label
-                        className="block text-gray-700 text-sm font-bold mb-2 font-Poppins" 
+                        className="block text-gray-700 text-md font-semibold mb-2 font-Poppins" 
                         >
                         Password
                         </label>

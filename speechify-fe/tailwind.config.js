@@ -10,7 +10,7 @@ export default {
       Gluten : ["Gluten","cursive"],
       Poppins : ["Poppins", "sans-serif"]
     },
-
+ 
   },
 
   plugins: [],
